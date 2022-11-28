@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 //Component Imports
-import Grid from './Grid';
-import SubmitForm from './SubmitForm';
+import Grid from './functionalComponents/Grid';
+import SubmitForm from './functionalComponents/SubmitForm';
 
 // Suggested initial states
 const initialValues = {
@@ -22,9 +22,6 @@ export default function AppFunctional(props) {
   }
 
   function getXYMessage() {
-    // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
-    // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
-    // returns the fully constructed string.
     return ('Coordinates ' + getXY())
   }
 
