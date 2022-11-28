@@ -17,6 +17,7 @@ export default function AppFunctional(props) {
   // Area to be used for individual slices of state
   const [activeIdx, setActiveIdx] = useState(initialValues.initialIndex);
   const [message, setMessage] = useState(initialValues.initialMessage);
+  const [steps, setSteps] = useState(initialValues.initialSteps);
 
   function getXY() {
     const xyCoords = [
@@ -55,12 +56,13 @@ export default function AppFunctional(props) {
       setMessage(`You can't go ${direction}`);
       return;
     }
-    setMessage(initialValues.initialMessage);
+    move();
   }
 
   function move(evt) {
-    // This event handler can use the helper above to obtain a new index for the "B",
-    // and change any states accordingly.
+    setSteps(steps + 1);
+    setMessage(initialValues.initialMessage);
+
   }
 
   function onChange(evt) {
@@ -74,7 +76,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved 0 times</h3>
+        <h3 id="steps">You moved {steps} times</h3>
       </div>
       <Grid activeIdx={activeIdx} />
       <div className="info">
