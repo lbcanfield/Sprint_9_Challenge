@@ -1,12 +1,16 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+
+//Component Imports
+import Grid from './Grid';
+import SubmitForm from './SubmitForm';
 
 // Suggested initial states
 const initialValues = {
- initialMessage: '',
- initialEmail: '',
- initialSteps: 0,
- initialIndex: 4    // the index the "B" is at
-} 
+  initialMessage: '',
+  initialEmail: '',
+  initialSteps: 0,
+  initialIndex: 4    // the index the "B" is at
+}
 
 export default function AppFunctional(props) {
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
@@ -52,15 +56,7 @@ export default function AppFunctional(props) {
         <h3 id="coordinates">Coordinates (2, 2)</h3>
         <h3 id="steps">You moved 0 times</h3>
       </div>
-      <div id="grid">
-        {
-          [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-            <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
-              {idx === 4 ? 'B' : null}
-            </div>
-          ))
-        }
-      </div>
+      <Grid />
       <div className="info">
         <h3 id="message"></h3>
       </div>
@@ -71,10 +67,7 @@ export default function AppFunctional(props) {
         <button id="down">DOWN</button>
         <button id="reset">reset</button>
       </div>
-      <form>
-        <input id="email" type="email" placeholder="type email"></input>
-        <input id="submit" type="submit"></input>
-      </form>
+      <SubmitForm />
     </div>
   )
 }
