@@ -1,8 +1,8 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, NavLink, Routes, Route } from 'react-router-dom'
-import AppClass from './components/AppClass'
-import AppFunctional from './components/AppFunctional'
+import AppClass from './components/classComponents/AppClass'
+import AppFunctional from './components/functionalComponents/AppFunctional'
 import './styles/reset.css'
 import './styles/styles.css'
 
