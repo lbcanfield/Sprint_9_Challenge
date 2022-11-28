@@ -1,10 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 // Suggested initial states
-const initialMessage = ''
-const initialEmail = ''
-const initialSteps = 0
-const initialIndex = 4 // the index the "B" is at
+const initialValues = {
+ initialMessage: '',
+ initialEmail: '',
+ initialSteps: 0,
+ initialIndex: 4    // the index the "B" is at
+} 
 
 export default function AppFunctional(props) {
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
