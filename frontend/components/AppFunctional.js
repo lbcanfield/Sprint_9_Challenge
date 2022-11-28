@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 //Component Imports
 import Grid from './functionalComponents/Grid';
 import SubmitForm from './functionalComponents/SubmitForm';
+import Keypad from './functionalComponents/Keypad';
 
 // Suggested initial states
 const initialValues = {
@@ -15,9 +16,17 @@ const initialValues = {
 export default function AppFunctional(props) {
   // Area to be used for individual slices of state
   const [activeIdx, setActiveIdx] = useState(initialValues.initialIndex);
+  const [message, setMessage] = useState(initialValues.initialMessage);
 
   function getXY() {
-    const xyCoords = [[1, 1], [2, 1], [3, 1], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]];
+    const xyCoords = [
+      [1, 1], [2, 1], [3, 1],
+      //  0       1       2
+      [1, 2], [2, 2], [3, 2],
+      //  3       4       5
+      [1, 3], [2, 3], [3, 3]
+      //  6       7       8
+    ];
     return (`(${xyCoords[activeIdx][0]}, ${xyCoords[activeIdx][1]})`);
   }
 
@@ -30,9 +39,23 @@ export default function AppFunctional(props) {
   }
 
   function getNextIndex(direction) {
-    // This helper takes a direction ("left", "up", etc) and calculates what the next index
-    // of the "B" would be. If the move is impossible because we are at the edge of the grid,
-    // this helper should return the current index unchanged.
+    if (direction === 'up' && activeIdx !== 0 && activeIdx !== 1 && activeIdx !== 2) {
+      setActiveIdx(activeIdx - 3);
+    }
+    else if (direction === 'left' && activeIdx !== 0 && activeIdx !== 3 && activeIdx !== 6) {
+      setActiveIdx(activeIdx - 1);
+    }
+    else if (direction === 'right' && activeIdx !== 2 && activeIdx !== 5 && activeIdx !== 8) {
+      setActiveIdx(activeIdx + 1);
+    }
+    else if (direction === 'down' && activeIdx !== 6 && activeIdx !== 7 && activeIdx !== 8) {
+      setActiveIdx(activeIdx + 3);
+    }
+    else {
+      setMessage(`You can't go ${direction}`);
+      return;
+    }
+    setMessage(initialValues.initialMessage);
   }
 
   function move(evt) {
@@ -47,24 +70,17 @@ export default function AppFunctional(props) {
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
   }
-  console.log(getXY())
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
         <h3 id="steps">You moved 0 times</h3>
       </div>
-      <Grid />
+      <Grid activeIdx={activeIdx} />
       <div className="info">
-        <h3 id="message"></h3>
+        <h3 id="message">{message}</h3>
       </div>
-      <div id="keypad">
-        <button id="left">LEFT</button>
-        <button id="up">UP</button>
-        <button id="right">RIGHT</button>
-        <button id="down">DOWN</button>
-        <button id="reset">reset</button>
-      </div>
+      <Keypad getNextIndex={getNextIndex} />
       <SubmitForm />
     </div>
   )
