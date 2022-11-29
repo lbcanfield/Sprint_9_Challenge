@@ -62,7 +62,7 @@ export default function AppFunctional(props) {
   }
 
   function getNextIndex(direction) {
-    setSteps(steps + 1);
+    // setSteps(steps + 1);
 
     if (direction === 'up' && activeIdx !== 0 && activeIdx !== 1 && activeIdx !== 2) {
       setActiveIdx(activeIdx - 3);
@@ -84,7 +84,7 @@ export default function AppFunctional(props) {
   }
 
   function move(evt) {
-    // setSteps(steps + 1);
+    setSteps(steps + 1);
     setMessage(initialValues.initialMessage);
 
   }
