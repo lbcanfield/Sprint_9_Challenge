@@ -35,6 +35,7 @@ export default class AppClass extends React.Component {
       email: '',
       index: 4,
       steps: 0,
+      winningMsg: ''
     }
   }
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
@@ -102,13 +103,8 @@ export default class AppClass extends React.Component {
 
   }
 
-  onChange = (evt) => {
-    // You will need this to update the value of the input.
-  }
 
-  onSubmit = (evt) => {
-    // Use a POST request to send a payload to the server.
-  }
+
 
   render() {
     console.log(this.state)
@@ -124,7 +120,7 @@ export default class AppClass extends React.Component {
           <h3 id="message">{this.state.message}</h3>
         </div>
         <Keypad reset={this.reset} getNextIndex={this.getNextIndex} />
-        <SubmitForm />
+        <SubmitForm winningMsg={this.state.winningMsg} getXY={this.getXY} steps={this.state.steps} />
       </div>
     )
   }
