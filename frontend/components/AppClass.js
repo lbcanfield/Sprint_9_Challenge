@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 
 import Keypad from './classComponents/Keypad';
-import SubmitForm from './classComponents/SubmitForm';
 import Grid from './classComponents/Grid';
 
 // Suggested initial states
