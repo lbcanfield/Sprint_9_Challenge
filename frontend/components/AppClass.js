@@ -11,46 +11,88 @@ const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 
 const initialState = {
-  message: initialMessage,
-  email: initialEmail,
-  index: initialIndex,
-  steps: initialSteps,
+  message: '',
+  email: '',
+  index: 4,
+  steps: 0,
 }
+
+const gridAddr = [
+  [1, 1], [2, 1], [3, 1],
+  //  0       1       2
+  [1, 2], [2, 2], [3, 2],
+  //  3       4       5
+  [1, 3], [2, 3], [3, 3]
+  //  6       7       8
+];
 
 export default class AppClass extends React.Component {
   constructor() {
     super();
     this.state = {
-      values: initialState
+      // values: initialState
+      message: '',
+      email: '',
+      index: 4,
+      steps: 0,
     }
   }
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
   // You can delete them and build your own logic from scratch.
 
   getXY = () => {
-    // It it not necessary to have a state to track the coordinates.
-    // It's enough to know what index the "B" is at, to be able to calculate them.
+    const idx = this.state.index;
+    return (gridAddr[idx])
   }
 
   getXYMessage = () => {
-    // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
-    // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
-    // returns the fully constructed string.
+    // console.log(this.getXY())
+    return (`Coordinates (${this.getXY()[0]},${this.getXY()[1]})`)
   }
 
   reset = () => {
     // Use this helper to reset all states to their initial values.
   }
 
-  getNextIndex = (direction) => {
-    // This helper takes a direction ("left", "up", etc) and calculates what the next index
-    // of the "B" would be. If the move is impossible because we are at the edge of the grid,
-    // this helper should return the current index unchanged.
+  updateIndex = value => {
+    // event.preventDefault();
+    const newIndex = this.state.index + value;
+    this.setState({ ...this.state, index: value })
+
   }
 
-  move = (evt) => {
+  getNextIndex = (direction) => {
+    const activeIdx = this.state.index;
+    if (direction === 'up' && activeIdx !== 0 && activeIdx !== 1 && activeIdx !== 2) {
+      return (this.state.index - 3);
+      // setActiveIdx(activeIdx - 3);
+    }
+    else if (direction === 'left' && activeIdx !== 0 && activeIdx !== 3 && activeIdx !== 6) {
+      return (this.state.index - 1);
+      // setActiveIdx(activeIdx - 1);
+    }
+    else if (direction === 'right' && activeIdx !== 2 && activeIdx !== 5 && activeIdx !== 8) {
+      return (this.state.index + 1);
+      // setActiveIdx(activeIdx + 1);
+    }
+    else if (direction === 'down' && activeIdx !== 6 && activeIdx !== 7 && activeIdx !== 8) {
+      return (this.state.index + 3);
+      // setActiveIdx(activeIdx + 3);
+    }
+    else {
+      setMessage(`You can't go ${direction}`);
+      return;
+    }
+  }
+
+  move = value => event => {
+    event.preventDefault();
+    console.log(this.getNextIndex(value));
+    this.updateIndex(this.getNextIndex(value));
+    // this.setState({ ...this.state.values, index: this.getNextIndex(value) });
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
+
   }
 
   onChange = (evt) => {
@@ -62,18 +104,19 @@ export default class AppClass extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     const { className } = this.props
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates (2, 2)</h3>
+          <h3 id="coordinates">{this.getXYMessage()}</h3>
           <h3 id="steps">You moved 0 times</h3>
         </div>
-        <Grid index={this.state.values.index} />
+        <Grid index={this.state.index} />
         <div className="info">
           <h3 id="message"></h3>
         </div>
-        <Keypad />
+        <Keypad move={this.move} />
         <SubmitForm />
       </div>
     )
