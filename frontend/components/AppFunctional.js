@@ -43,11 +43,11 @@ export default function AppFunctional(props) {
       [1, 3], [2, 3], [3, 3]
       //  6       7       8
     ];
-    return (`(${xyCoords[activeIdx][0]},${xyCoords[activeIdx][1]})`);
+    return (xyCoords[activeIdx]);
   }
 
   function getXYMessage() {
-    return ('Coordinates ' + getXY())
+    return (`Coordinates (${getXY()})`)
   }
 
   function reset() {
@@ -62,6 +62,8 @@ export default function AppFunctional(props) {
   }
 
   function getNextIndex(direction) {
+    setSteps(steps + 1);
+
     if (direction === 'up' && activeIdx !== 0 && activeIdx !== 1 && activeIdx !== 2) {
       setActiveIdx(activeIdx - 3);
     }
@@ -82,7 +84,7 @@ export default function AppFunctional(props) {
   }
 
   function move(evt) {
-    setSteps(steps + 1);
+    // setSteps(steps + 1);
     setMessage(initialValues.initialMessage);
 
   }
@@ -92,8 +94,8 @@ export default function AppFunctional(props) {
   function onSubmit(event) {
     event.preventDefault();
     const newPlayer = {
-      "x": xCoord,
-      "y": yCoord,
+      "x": getXY()[0],
+      "y": getXY()[1],
       "steps": steps,
       "email": email
     }
