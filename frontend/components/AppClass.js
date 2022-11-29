@@ -46,7 +46,6 @@ export default class AppClass extends React.Component {
   }
 
   getXYMessage = () => {
-    // console.log(this.getXY())
     return (`Coordinates (${this.getXY()[0]},${this.getXY()[1]})`)
   }
 
@@ -55,43 +54,51 @@ export default class AppClass extends React.Component {
   }
 
   updateIndex = value => {
-    // event.preventDefault();
-    const newIndex = this.state.index + value;
-    this.setState({ ...this.state, index: value })
-
+    this.setState({ ...this.state, index: value, steps: (this.state.steps + 1), message: '' });
   }
 
-  getNextIndex = (direction) => {
-    const activeIdx = this.state.index;
-    if (direction === 'up' && activeIdx !== 0 && activeIdx !== 1 && activeIdx !== 2) {
-      return (this.state.index - 3);
-      // setActiveIdx(activeIdx - 3);
-    }
-    else if (direction === 'left' && activeIdx !== 0 && activeIdx !== 3 && activeIdx !== 6) {
-      return (this.state.index - 1);
-      // setActiveIdx(activeIdx - 1);
-    }
-    else if (direction === 'right' && activeIdx !== 2 && activeIdx !== 5 && activeIdx !== 8) {
-      return (this.state.index + 1);
-      // setActiveIdx(activeIdx + 1);
-    }
-    else if (direction === 'down' && activeIdx !== 6 && activeIdx !== 7 && activeIdx !== 8) {
-      return (this.state.index + 3);
-      // setActiveIdx(activeIdx + 3);
+  stepsMsg() {
+    if (this.state.steps === 1) {
+      return (`You moved ${this.state.steps} time`)
     }
     else {
-      setMessage(`You can't go ${direction}`);
-      return;
+      return (`You moved ${this.state.steps} times`)
     }
+  }
+
+  updateMsg(value) {
+    event.preventDefault();
+    this.setState({ ...this.state, message: value });
+  }
+
+
+
+  getNextIndex = direction => event => {
+    event.preventDefault();
+    const activeIdx = this.state.index;
+    if (direction === 'up' && activeIdx !== 0 && activeIdx !== 1 && activeIdx !== 2) {
+      this.updateIndex(this.state.index - 3);
+    }
+    else if (direction === 'left' && activeIdx !== 0 && activeIdx !== 3 && activeIdx !== 6) {
+      this.updateIndex(this.state.index - 1);
+    }
+    else if (direction === 'right' && activeIdx !== 2 && activeIdx !== 5 && activeIdx !== 8) {
+      this.updateIndex(this.state.index + 1);
+    }
+    else if (direction === 'down' && activeIdx !== 6 && activeIdx !== 7 && activeIdx !== 8) {
+      this.updateIndex(this.state.index + 3);
+    }
+    else {
+      this.updateMsg(`You can't go ${direction}`);
+    }
+
   }
 
   move = value => event => {
     event.preventDefault();
-    console.log(this.getNextIndex(value));
-    this.updateIndex(this.getNextIndex(value));
-    // this.setState({ ...this.state.values, index: this.getNextIndex(value) });
-    // This event handler can use the helper above to obtain a new index for the "B",
-    // and change any states accordingly.
+    if (this.updateIndex(this.getNextIndex(value))) {
+      return;
+    }
 
   }
 
@@ -110,13 +117,13 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{this.getXYMessage()}</h3>
-          <h3 id="steps">You moved 0 times</h3>
+          <h3 id="steps">{this.stepsMsg()}</h3>
         </div>
         <Grid index={this.state.index} />
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message">{this.state.message}</h3>
         </div>
-        <Keypad move={this.move} />
+        <Keypad getNextIndex={this.getNextIndex} />
         <SubmitForm />
       </div>
     )
