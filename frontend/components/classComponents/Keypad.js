@@ -8,7 +8,7 @@ export default class Keypad extends React.Component {
                 <button id="up" onClick={this.props.getNextIndex('up')}>"UP</button>
                 <button id="right" onClick={this.props.getNextIndex('right')}>"RIGHT</button>
                 <button id="down" onClick={this.props.getNextIndex('down')}>"DOWN</button>
-                <button id="reset" onClick={this.props.getNextIndex('up')}>"reset</button>
+                <button id="reset" onClick={this.props.reset}>"reset</button>
             </div>
         )
     }

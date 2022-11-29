@@ -49,8 +49,8 @@ export default class AppClass extends React.Component {
     return (`Coordinates (${this.getXY()[0]},${this.getXY()[1]})`)
   }
 
-  reset = () => {
-    // Use this helper to reset all states to their initial values.
+  reset = value => {
+    this.setState({ ...this.state, index: 4, steps: 0, message: '', email: '' });
   }
 
   updateIndex = value => {
@@ -123,7 +123,7 @@ export default class AppClass extends React.Component {
         <div className="info">
           <h3 id="message">{this.state.message}</h3>
         </div>
-        <Keypad getNextIndex={this.getNextIndex} />
+        <Keypad reset={this.reset} getNextIndex={this.getNextIndex} />
         <SubmitForm />
       </div>
     )
