@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
 //Component Imports
 import Grid from './functionalComponents/Grid';
 import SubmitForm from './functionalComponents/SubmitForm';
 import Keypad from './functionalComponents/Keypad';
+import Message from './functionalComponents/Message';
 
 // Suggested initial states
 const initialValues = {
@@ -18,6 +20,19 @@ export default function AppFunctional(props) {
   const [activeIdx, setActiveIdx] = useState(initialValues.initialIndex);
   const [message, setMessage] = useState(initialValues.initialMessage);
   const [steps, setSteps] = useState(initialValues.initialSteps);
+  const [email, setEmail] = useState(initialValues.initialEmail);
+  const [xCoord, setXCoord] = useState(2);
+  const [yCoord, setyCoord] = useState(2);
+  const [winMsg, setWinMsg] = useState('');
+
+  function stepsMsg() {
+    if (steps === 1) {
+      return (`You moved ${steps} time`)
+    }
+    else {
+      return (`You moved ${steps} times`)
+    }
+  }
 
   function getXY() {
     const xyCoords = [
@@ -28,7 +43,7 @@ export default function AppFunctional(props) {
       [1, 3], [2, 3], [3, 3]
       //  6       7       8
     ];
-    return (`(${xyCoords[activeIdx][0]}, ${xyCoords[activeIdx][1]})`);
+    return (`(${xyCoords[activeIdx][0]},${xyCoords[activeIdx][1]})`);
   }
 
   function getXYMessage() {
@@ -37,6 +52,13 @@ export default function AppFunctional(props) {
 
   function reset() {
     // Use this helper to reset all states to their initial values.
+    setActiveIdx(initialValues.initialIndex);
+    setMessage(initialValues.initialMessage);
+    setSteps(initialValues.initialSteps);
+    setEmail(initialValues.initialEmail);
+    setXCoord(2);
+    setyCoord(2);
+    setWinMsg('');
   }
 
   function getNextIndex(direction) {
@@ -65,25 +87,45 @@ export default function AppFunctional(props) {
 
   }
 
-  function onChange(evt) {
-    // You will need this to update the value of the input.
+
+
+  function onSubmit(event) {
+    event.preventDefault();
+    const newPlayer = {
+      "x": xCoord,
+      "y": yCoord,
+      "steps": steps,
+      "email": email
+    }
+    console.log(newPlayer);
+    axios.post('http://localhost:9000/api/result', newPlayer)
+      .then(response => {
+        // console.log(response)
+        setWinMsg(response.data.message);
+      })
+      .catch(error => {
+        setWinMsg(error.response.data.message);
+      })
+    setEmail(initialValues.initialEmail);
   }
 
-  function onSubmit(evt) {
-    // Use a POST request to send a payload to the server.
-  }
+
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved {steps} times</h3>
+        <h3 id="steps">{stepsMsg()}</h3>
       </div>
       <Grid activeIdx={activeIdx} />
-      <div className="info">
-        <h3 id="message">{message}</h3>
-      </div>
-      <Keypad getNextIndex={getNextIndex} />
-      <SubmitForm />
+      <Message message={message} />
+      <Keypad getNextIndex={getNextIndex} reset={reset} />
+      <SubmitForm
+
+        onSubmit={onSubmit}
+        winMsg={winMsg}
+        setEmail={setEmail}
+        email={email}
+      />
     </div>
   )
 }
